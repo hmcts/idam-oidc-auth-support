@@ -101,6 +101,14 @@ publishing {
 			groupId project.group
 			artifactId 'idam-oidc-auth-support'
 			version project.version
+			versionMapping {
+				usage('java-api') {
+					fromResolutionOf('runtimeClasspath')
+				}
+				usage('java-runtime') {
+					fromResolutionResult()
+				}
+			}
 		}
 	}
 }
