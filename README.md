@@ -1,5 +1,5 @@
-[![Release](https://jitpack.io/v/hmcts/idam-legacy-auth-support.svg)](https://jitpack.io/#hmcts/idam-oidc-auth-support)
-[![JitPack Badge](https://github.com/hmcts/idam-legacy-auth-support/actions/workflows/jitpack_build.yml/badge.svg)](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/jitpack_build.yml)
+[![Release](https://jitpack.io/v/hmcts/idam-oidc-auth-support.svg)](https://jitpack.io/#hmcts/idam-oidc-auth-support)
+[![JitPack Badge](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/jitpack_build.yml/badge.svg)](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/jitpack_build.yml)
 
 # IdAM OIDC Auth Support
 A Java module to simplify IdAM client credential calls.
