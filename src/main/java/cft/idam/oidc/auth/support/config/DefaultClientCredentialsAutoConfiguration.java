@@ -5,8 +5,12 @@ import feign.RequestInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 /**
@@ -28,20 +32,35 @@ public class DefaultClientCredentialsAutoConfiguration {
     /**
      * Default client credentials feign request interceptor.
      *
-     * @param oauth2AuthorizedClientManager from spring
+     * @param oauth2AuthorizedClientService from spring
      * @param clientRegistrationRepository  from spring
      * @return Client credentials request interceptor.
      */
+    @Bean
     public RequestInterceptor defaultClientCredentialsInterceptor(
-            OAuth2AuthorizedClientManager oauth2AuthorizedClientManager,
+            OAuth2AuthorizedClientService oauth2AuthorizedClientService,
             ClientRegistrationRepository clientRegistrationRepository) {
         log.info("idam-oidc-auth-support: Configured defaultClientCredentialsInterceptor "
                         + "for client reference: {}, endpoints: {}",
                 clientRegistrationReference, clientCredentialsEndpointRegex);
         return new ClientCredentialsRequestInterceptor(
                 clientRegistrationRepository.findByRegistrationId(clientRegistrationReference),
-                oauth2AuthorizedClientManager,
+                openIdAuthorizedClientManager(oauth2AuthorizedClientService, clientRegistrationRepository),
                 clientCredentialsEndpointRegex);
+    }
+
+    private OAuth2AuthorizedClientManager openIdAuthorizedClientManager(
+            OAuth2AuthorizedClientService oauth2AuthorizedClientService,
+            ClientRegistrationRepository clientRegistrationRepository) {
+        AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager =
+                new AuthorizedClientServiceOAuth2AuthorizedClientManager(clientRegistrationRepository,
+                        oauth2AuthorizedClientService);
+        authorizedClientManager
+                .setAuthorizedClientProvider(
+                        OAuth2AuthorizedClientProviderBuilder.builder()
+                                .clientCredentials()
+                                .refreshToken().build());
+        return authorizedClientManager;
     }
 
 }
