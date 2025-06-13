@@ -1,5 +1,4 @@
-[![Release](https://jitpack.io/v/hmcts/idam-oidc-auth-support.svg)](https://jitpack.io/#hmcts/idam-oidc-auth-support)
-[![JitPack Badge](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/jitpack_build.yml/badge.svg)](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/jitpack_build.yml)
+[![ADO artifacts Badge](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/ado_artifacts_build.yml/badge.svg)](https://github.com/hmcts/idam-oidc-auth-support/actions/workflows/ado_artifacts_build.yml)
 
 # IdAM OIDC Auth Support
 A Java module to simplify IdAM client credential calls.
