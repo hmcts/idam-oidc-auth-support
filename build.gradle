@@ -100,9 +100,9 @@ publishing {
 	publications {
 		Main(MavenPublication) {
 			from components.java
-			groupId project.group
-			artifactId 'idam-oidc-auth-support'
-			version project.version
+			groupId = project.group
+			artifactId = 'idam-oidc-auth-support'
+			version = project.version
 			versionMapping {
 				usage('java-api') {
 					fromResolutionOf('runtimeClasspath')
