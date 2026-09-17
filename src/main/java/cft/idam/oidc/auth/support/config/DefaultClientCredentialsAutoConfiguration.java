@@ -23,11 +23,22 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 @ConditionalOnProperty(prefix = "idam.oidc.client-credentials", name = "registration-reference")
 public class DefaultClientCredentialsAutoConfiguration {
 
-    @Value("${idam.oidc.client-credentials.registration-reference}")
-    private String clientRegistrationReference;
+    private final String clientRegistrationReference;
 
-    @Value("${idam.oidc.client-credentials.endpoint-regex}")
-    private String clientCredentialsEndpointRegex;
+    private final String clientCredentialsEndpointRegex;
+
+    /**
+     * Creates the default client-credentials auto-configuration used by Spring.
+     *
+     * @param clientRegistrationReference OAuth2 client registration used for client credentials
+     * @param clientCredentialsEndpointRegex URL pattern identifying requests that require client credentials
+     */
+    public DefaultClientCredentialsAutoConfiguration(
+            @Value("${idam.oidc.client-credentials.registration-reference}") String clientRegistrationReference,
+            @Value("${idam.oidc.client-credentials.endpoint-regex}") String clientCredentialsEndpointRegex) {
+        this.clientRegistrationReference = clientRegistrationReference;
+        this.clientCredentialsEndpointRegex = clientCredentialsEndpointRegex;
+    }
 
     /**
      * Default client credentials feign request interceptor.

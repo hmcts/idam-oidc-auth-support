@@ -11,13 +11,12 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class ClientCredentialsRequestInterceptorTest {
@@ -62,16 +61,14 @@ class ClientCredentialsRequestInterceptorTest {
     void applyInvalidUrl() {
         given(requestTemplate.url()).willReturn("/invalid-url");
         underTest.apply(requestTemplate);
-        verify(clientRegistration, never()).getRegistrationId();
-        verify(oauth2AuthorizedClientManager, never()).authorize(any());
+        verifyNoInteractions(oauth2AuthorizedClientManager);
     }
 
     @Test
     void applyNullUrl() {
         given(requestTemplate.url()).willReturn(null);
         underTest.apply(requestTemplate);
-        verify(clientRegistration, never()).getRegistrationId();
-        verify(oauth2AuthorizedClientManager, never()).authorize(any());
+        verifyNoInteractions(oauth2AuthorizedClientManager);
     }
 
     @Test
@@ -79,12 +76,10 @@ class ClientCredentialsRequestInterceptorTest {
         given(requestTemplate.url()).willReturn("/test-url");
         given(clientRegistration.getRegistrationId()).willReturn("test-reg");
         given(oauth2AuthorizedClientManager.authorize(any())).willReturn(null);
-        try {
-            underTest.apply(requestTemplate);
-            fail();
-        } catch (IllegalStateException ise) {
-            assertEquals("client credentials flow on test-reg failed, client is null", ise.getMessage());
-        }
+        assertThatThrownBy(() -> underTest.apply(requestTemplate))
+                .as("a missing authorized client")
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("client credentials flow on test-reg failed, client is null");
     }
 
 }
