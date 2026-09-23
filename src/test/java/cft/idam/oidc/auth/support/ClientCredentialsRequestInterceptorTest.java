@@ -39,7 +39,7 @@ class ClientCredentialsRequestInterceptorTest {
     private ClientCredentialsRequestInterceptor underTest;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         given(clientRegistration.getClientId()).willReturn("test-client");
         underTest = new ClientCredentialsRequestInterceptor(
                 clientRegistration, oauth2AuthorizedClientManager, "/test-url");
